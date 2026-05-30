@@ -1,6 +1,6 @@
 'use client';
 
-import { formatCurrency, formatDate } from '@/lib/formatters';
+import { formatCurrency } from '@/lib/formatters';
 import { ShoppingCart, Utensils, Car, Film, Stethoscope, Book, MoreHorizontal } from 'lucide-react';
 import { format, isToday, isYesterday, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -21,16 +21,6 @@ const categoryIcons: Record<string, React.ElementType> = {
   health: Stethoscope,
   education: Book,
   other: MoreHorizontal,
-};
-
-const categoryLabels: Record<string, string> = {
-  food: 'Alimentação',
-  transport: 'Transporte',
-  entertainment: 'Lazer',
-  shopping: 'Compras',
-  health: 'Saúde',
-  education: 'Educação',
-  other: 'Outros',
 };
 
 function formatExpenseDate(dateStr: string) {

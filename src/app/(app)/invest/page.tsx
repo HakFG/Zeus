@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import InvestmentSimulator from '@/components/invest/InvestmentSimulator';
 
 export default function InvestPage() {

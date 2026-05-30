@@ -8,7 +8,7 @@ export default function InvestmentSimulator() {
   const [principal, setPrincipal] = useState(500);
   const [monthly, setMonthly] = useState(100);
   const [months, setMonths] = useState(12);
-  const [cdi, setCdi] = useState(0.1375); // 13.75% a.a.
+  const [cdi] = useState(0.1375); // 13.75% a.a.
   const [percentCdi, setPercentCdi] = useState(1.0); // 100% CDI
   const [result, setResult] = useState({ balance: 0, invested: 0, earnings: 0 });
 
