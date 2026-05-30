@@ -1,71 +1,62 @@
-# Visão Geral do Projeto Zeus
+# Visao Geral do Projeto Zeus
 
 ## 1. Resumo do projeto
-Zeus é um aplicativo web financeiro inteligente, concebido como um assistente pessoal estilo "Nubank" voltado para gerenciamento de mesadas e investimentos. O app permite acompanhar gastos, prever rendimentos (CDI), gerenciar diferentes fontes de entrada e criar metas financeiras. 
+Zeus e um aplicativo web financeiro pessoal, concebido como um assistente estilo "Nubank" voltado para gerenciamento de mesadas e investimentos. O app permite acompanhar gastos, prever rendimentos (CDI), gerenciar diferentes fontes de entrada e criar metas financeiras.
 
-A interface foca na usabilidade móvel com um visual premium, apostando em um design limpo, tons de "deep teal" e tipografia moderna para incentivar o uso diário.
+A interface foca na usabilidade movel com um visual premium, design limpo, tons de "deep teal" e tipografia moderna para incentivar o uso diario.
 
 ## 2. Arquitetura
-A aplicação é construída sob a stack Next.js 14 com **App Router**, fornecendo páginas protegidas e server-rendered.
-As **Server Actions** lidam com a mutação de dados diretamente do formulário para o banco de dados via Drizzle ORM, dispensando a criação de rotas tradicionais de API.
-Os dados são armazenados na nuvem através do **Neon PostgreSQL Serverless**, garantindo alta disponibilidade sem custos altos de infraestrutura contínua.
+A aplicacao e construida com Next.js 14 e App Router, usando paginas server-rendered e Server Actions.
+As Server Actions lidam com a mutacao de dados diretamente do formulario para o banco de dados via Drizzle ORM, dispensando rotas tradicionais de API.
+Os dados sao armazenados na nuvem atraves do Neon PostgreSQL Serverless.
 
 ## 3. Banco de Dados (Schema)
 O banco de dados usa as seguintes tabelas (Drizzle):
-- `users`: Usuários do sistema.
-- `settings`: Configurações de mesada, CDI, dark mode e etc. Relacionado por `userId`.
-- `expenses`: Despesas registradas (valor, categoria, nota, etc).
-- `income`: Fontes de renda diversas (mesada, estágio, presente, etc).
+- `users`: Mantem o usuario pessoal fixo usado como dono dos dados.
+- `settings`: Configuracoes de mesada, CDI, dark mode etc. Relacionado por `userId`.
+- `expenses`: Despesas registradas (valor, categoria, nota etc).
+- `income`: Fontes de renda diversas (mesada, estagio, presente etc).
 - `investments`: Entradas de investimentos realizados.
-- `savings_goals`: Metas de economia com valor, ícone, cor, e status de conclusão.
-*Existem também as tabelas auxiliares para o funcionamento do next-auth (`account`, `session`, `verificationToken`).*
+- `savings_goals`: Metas de economia com valor, icone, cor e status de conclusao.
 
-## 4. Autenticação
-A autenticação é feita com **Next-Auth v5** em conjunto com a **Resend**.
-O usuário informa seu e-mail na tela de login, e o sistema envia um "Magic Link" via e-mail. Ao clicar no link, o usuário é validado sem precisar lembrar senhas, com a sessão sendo gerada e armazenada no banco. Rotas sob `/(app)` são blindadas pelo `middleware.ts`.
+## 4. Acesso pessoal
+O app nao possui autenticacao por e-mail, senha, Magic Link ou sessao.
+Como o projeto e de uso pessoal, a aplicacao redireciona diretamente para `/dashboard` e as Server Actions usam automaticamente um usuario local fixo, criado no banco quando necessario.
 
 ## 5. Server Actions
-O padrão principal no `src/actions/` envolve funções exportadas com `'use server'`.
-A cada ação, a função faz um hit na sessão via `auth()` para validação, insere ou atualiza os dados correspondentes via `db` e invoca a função `revalidatePath` para atualizar dinamicamente as telas como dashboard, gráficos e calendário instantaneamente.
+O padrao principal em `src/actions/` envolve funcoes exportadas com `'use server'`.
+A cada acao, a funcao obtem o usuario pessoal por `getPersonalUserId()`, insere ou atualiza os dados correspondentes via `db` e invoca `revalidatePath` para atualizar telas como dashboard, graficos, calendario, investimentos e configuracoes.
 
 ## 6. Componentes principais
-- **BottomNav**: Responsável por navegação em visualizações mobile.
-- **BalanceCard**: Apresenta de forma resumida e destacada o saldo total disponível no mês e resumo financeiro.
-- **BudgetProgress**: Barra de progresso visual de quanto do orçamento atual já foi comprometido.
-- **InvestmentSimulator**: Um sandbox onde o usuário pode simular os juros compostos calculados pela taxa do CDI num determinado número de meses.
-- **ExpenseForm / IncomeForm**: Interfaces simplificadas e otimizadas para digitação ágil de entradas financeiras.
+- **BottomNav**: Responsavel por navegacao em visualizacoes mobile.
+- **BalanceCard**: Apresenta de forma resumida e destacada o saldo total disponivel no mes e resumo financeiro.
+- **BudgetProgress**: Barra de progresso visual de quanto do orcamento atual ja foi comprometido.
+- **InvestmentSimulator**: Sandbox onde o usuario pode simular juros compostos calculados pela taxa do CDI.
+- **ExpenseForm / IncomeForm**: Interfaces simplificadas e otimizadas para digitacao agil de entradas financeiras.
 
-## 7. Lógica de investimento
-O arquivo `investmentCalc.ts` contém as fórmulas de rentabilidade.
-A taxa anual do CDI informada pelo usuário (e a porcentagem deste CDI que a corretora oferece, por exemplo, 100%) é primeiramente convertida em uma taxa equivalente mensal (`annualToMonthlyRate`). A simulação de crescimento calcula, mês a mês, a incidência dessa taxa sobre o saldo mais os novos aportes regulares.
+## 7. Logica de investimento
+O arquivo `investmentCalc.ts` contem as formulas de rentabilidade.
+A taxa anual do CDI informada pelo usuario e a porcentagem deste CDI oferecida pela corretora sao convertidas em taxa mensal por `annualToMonthlyRate`. A simulacao calcula, mes a mes, a incidencia dessa taxa sobre o saldo mais os novos aportes regulares.
 
-## 8. Variáveis de ambiente
-- `DATABASE_URL`: URL de conexão PostgreSQL da Neon.
-- `AUTH_SECRET`: Segredo de criptografia da sessão do Next-Auth.
-- `AUTH_URL`: Endpoint de base da aplicação para a Auth (ex: http://localhost:3000/api/auth).
-- `AUTH_RESEND_KEY`: Chave de API da Resend para enviar e-mails de Magic Link.
-- `EMAIL_FROM`: E-mail de remetente (ex: onboarding@resend.dev).
+## 8. Variaveis de ambiente
+- `DATABASE_URL`: URL de conexao PostgreSQL da Neon.
 
 ## 9. Como rodar localmente
-1. Instale as dependências: `npm install`
-2. Crie ou configure o arquivo `.env.local` na raiz com os valores indicados.
+1. Instale as dependencias: `npm install`
+2. Crie ou configure o arquivo `.env.local` com `DATABASE_URL`.
 3. Para garantir que o banco esteja sincronizado, execute: `npx drizzle-kit push`
 4. Inicie o servidor: `npm run dev`
 5. Acesse `http://localhost:3000`
 
 ## 10. Deploy na Vercel
-1. Crie um repositório no GitHub ou serviço similar.
-2. Acesse a Vercel, crie um novo projeto importando este repositório.
-3. Conecte sua conta do Neon nas integrações nativas da Vercel para auto-injetar a `DATABASE_URL`.
-4. Adicione as demais variáveis do `next-auth` e `resend` nas Environment Variables da Vercel.
-5. Inicie o deploy e todas as configurações estarão validadas.
+1. Crie um repositorio no GitHub ou servico similar.
+2. Acesse a Vercel e crie um novo projeto importando este repositorio.
+3. Conecte sua conta do Neon nas integracoes nativas da Vercel para auto-injetar a `DATABASE_URL`, ou cadastre essa variavel manualmente.
+4. Inicie o deploy.
 
 ## 11. Melhorias futuras
-1. Implementação dos relatórios e gráficos reais nas views `Charts` e `Calendar` utilizando Recharts.
-2. Adicionar opção de notificação push caso um limite de orçamento seja excedido.
-3. Internacionalização (suporte nativo multi-idioma).
-4. Sincronização offline-first PWA com Service Workers.
-5. Gestão de metas colaborativa (ex: vaquinha com outros usuários do app).
-6. Opção de digitalizar comprovantes (upload de imagens).
-7. Geração de relatórios PDF automatizados no fim do mês.
-8. Machine learning ou análises avançadas para sugerir onde o usuário poderia economizar.
+1. Implementacao dos relatorios e graficos reais nas views `Charts` e `Calendar` utilizando Recharts.
+2. Adicionar opcao de notificacao push caso um limite de orcamento seja excedido.
+3. Sincronizacao offline-first PWA com Service Workers.
+4. Opcao de digitalizar comprovantes (upload de imagens).
+5. Geracao de relatorios PDF automatizados no fim do mes.

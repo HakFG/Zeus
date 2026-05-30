@@ -1,42 +1,38 @@
 'use server';
-import { auth } from '@/lib/auth';
 import { db } from '@/db';
 import { savingsGoals } from '@/db/schema';
 import { revalidatePath } from 'next/cache';
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
+import { getPersonalUserId } from '@/lib/personalUser';
 
 export async function addGoal(data: { name: string; targetAmount: string; deadline: string; icon: string; color: string }) {
-  const session = await auth();
-  if (!session?.user?.id) throw new Error('Não autorizado');
+  const userId = await getPersonalUserId();
 
-  await db.insert(savingsGoals).values({ ...data, userId: session.user.id });
+  await db.insert(savingsGoals).values({ ...data, userId });
   revalidatePath('/invest');
 }
 
 export async function getGoals() {
-  const session = await auth();
-  if (!session?.user?.id) throw new Error('Não autorizado');
+  const userId = await getPersonalUserId();
 
   return await db.query.savingsGoals.findMany({
-    where: eq(savingsGoals.userId, session.user.id),
+    where: eq(savingsGoals.userId, userId),
     orderBy: [desc(savingsGoals.createdAt)],
   });
 }
 
 export async function updateGoalProgress(id: string, savedAmount: string, completed: boolean) {
-  const session = await auth();
-  if (!session?.user?.id) throw new Error('Não autorizado');
+  const userId = await getPersonalUserId();
 
   await db.update(savingsGoals)
     .set({ savedAmount, completed })
-    .where(eq(savingsGoals.id, id));
+    .where(and(eq(savingsGoals.id, id), eq(savingsGoals.userId, userId)));
   revalidatePath('/invest');
 }
 
 export async function deleteGoal(id: string) {
-  const session = await auth();
-  if (!session?.user?.id) throw new Error('Não autorizado');
+  const userId = await getPersonalUserId();
 
-  await db.delete(savingsGoals).where(eq(savingsGoals.id, id));
+  await db.delete(savingsGoals).where(and(eq(savingsGoals.id, id), eq(savingsGoals.userId, userId)));
   revalidatePath('/invest');
 }
