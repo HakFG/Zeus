@@ -1,7 +1,7 @@
 # Visao Geral do Projeto Zeus
 
 ## 1. Resumo do projeto
-Zeus e um aplicativo web financeiro pessoal, concebido como um assistente estilo "Nubank" voltado para gerenciamento de mesadas e investimentos. O app permite acompanhar gastos, prever rendimentos (CDI), gerenciar diferentes fontes de entrada e criar metas financeiras.
+Zeus e um aplicativo web financeiro pessoal, concebido como um assistente estilo "Nubank" voltado para gerenciamento de mesadas e investimentos. O app permite acompanhar gastos por data, prever rendimentos (CDI), gerenciar diferentes fontes de entrada e criar metas financeiras.
 
 A interface foca na usabilidade movel com um visual premium, design limpo, tons de "deep teal" e tipografia moderna para incentivar o uso diario.
 
@@ -14,8 +14,8 @@ Os dados sao armazenados na nuvem atraves do Neon PostgreSQL Serverless.
 O banco de dados usa as seguintes tabelas (Drizzle):
 - `users`: Mantem o usuario pessoal fixo usado como dono dos dados.
 - `settings`: Configuracoes de mesada, CDI, dark mode etc. Relacionado por `userId`.
-- `expenses`: Despesas registradas (valor, categoria, nota etc).
-- `income`: Fontes de renda diversas (mesada, estagio, presente etc).
+- `expenses`: Despesas registradas com valor, categoria, descricao, data real do gasto e nota opcional.
+- `income`: Fontes de renda diversas com valor, tipo, descricao, data real da entrada e recorrencia.
 - `investments`: Entradas de investimentos realizados.
 - `savings_goals`: Metas de economia com valor, icone, cor e status de conclusao.
 
@@ -26,13 +26,15 @@ Como o projeto e de uso pessoal, a aplicacao redireciona diretamente para `/dash
 ## 5. Server Actions
 O padrao principal em `src/actions/` envolve funcoes exportadas com `'use server'`.
 A cada acao, a funcao obtem o usuario pessoal por `getPersonalUserId()`, insere ou atualiza os dados correspondentes via `db` e invoca `revalidatePath` para atualizar telas como dashboard, graficos, calendario, investimentos e configuracoes.
+As datas de despesas e rendas sao informadas pelo usuario no formulario de lancamento, entao um gasto antigo registrado depois continua aparecendo no dia correto.
 
 ## 6. Componentes principais
 - **BottomNav**: Responsavel por navegacao em visualizacoes mobile.
 - **BalanceCard**: Apresenta de forma resumida e destacada o saldo total disponivel no mes e resumo financeiro.
 - **BudgetProgress**: Barra de progresso visual de quanto do orcamento atual ja foi comprometido.
+- **ExpenseCalendar**: Calendario mensal clicavel que agrupa gastos por dia, mostra o total diario no quadrado da data e lista as despesas do dia selecionado.
 - **InvestmentSimulator**: Sandbox onde o usuario pode simular juros compostos calculados pela taxa do CDI.
-- **ExpenseForm / IncomeForm**: Interfaces simplificadas e otimizadas para digitacao agil de entradas financeiras.
+- **ExpenseForm / IncomeForm**: Interfaces simplificadas para lancar valores, descricao, classificacao e data exata do evento financeiro.
 
 ## 7. Logica de investimento
 O arquivo `investmentCalc.ts` contem as formulas de rentabilidade.
@@ -55,7 +57,7 @@ A taxa anual do CDI informada pelo usuario e a porcentagem deste CDI oferecida p
 4. Inicie o deploy.
 
 ## 11. Melhorias futuras
-1. Implementacao dos relatorios e graficos reais nas views `Charts` e `Calendar` utilizando Recharts.
+1. Implementacao dos relatorios e graficos reais na view `Charts` utilizando Recharts.
 2. Adicionar opcao de notificacao push caso um limite de orcamento seja excedido.
 3. Sincronizacao offline-first PWA com Service Workers.
 4. Opcao de digitalizar comprovantes (upload de imagens).

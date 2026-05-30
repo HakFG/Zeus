@@ -4,9 +4,18 @@ import { useState } from 'react';
 import { addIncome } from '@/actions/income';
 import { useRouter } from 'next/navigation';
 
+function getTodayDateInputValue() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 export default function IncomeForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [defaultDate] = useState(getTodayDateInputValue);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -18,7 +27,7 @@ export default function IncomeForm() {
         amount: formData.get('amount') as string,
         type: formData.get('type') as string,
         description: formData.get('description') as string,
-        date: new Date().toISOString(), // In a real app, use a date picker
+        date: formData.get('date') as string,
         recurring: formData.get('recurring') === 'on',
       });
       router.push('/dashboard');
@@ -72,6 +81,17 @@ export default function IncomeForm() {
           <option value="gift">Presente</option>
           <option value="other">Outro</option>
         </select>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Data da renda</label>
+        <input
+          type="date"
+          name="date"
+          required
+          defaultValue={defaultDate}
+          className="mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+        />
       </div>
 
       <div className="flex items-center">
