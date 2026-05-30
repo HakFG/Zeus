@@ -1,28 +1,1358 @@
+/* ============================================================
+   ZEUS — Finanças Pessoais
+   Design System: Greek God / Olympian Dark Luxury
+   Aesthetic: Divine Maximalism — Dark skies, gold lightning,
+              marble textures, celestial depth
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: #f8fafc;
-    --foreground: #0f172a;
-  }
+/* ============================================================
+   CSS CUSTOM PROPERTIES — DIVINE PALETTE
+   ============================================================ */
+:root {
+  /* Core Olympian Palette */
+  --zeus-void:        #05070f;
+  --zeus-night:       #080d1a;
+  --zeus-deep:        #0b1228;
+  --zeus-storm:       #0f1a3a;
+  --zeus-twilight:    #1a2550;
+  --zeus-dusk:        #1e2d5c;
 
-  .dark {
-    --background: #0f172a;
-    --foreground: #f8fafc;
-  }
+  /* Lightning & Gold */
+  --zeus-bolt:        #f5c842;
+  --zeus-gold:        #d4a017;
+  --zeus-gold-light:  #f0d060;
+  --zeus-gold-pale:   #fef3c7;
+  --zeus-amber:       #e8900a;
+
+  /* Marble & Mist */
+  --zeus-marble:      #e8e4dc;
+  --zeus-marble-mid:  #c8c4bc;
+  --zeus-silver:      #a0aec0;
+  --zeus-mist:        rgba(200, 210, 240, 0.12);
+  --zeus-glass:       rgba(255, 255, 255, 0.04);
+  --zeus-glass-mid:   rgba(255, 255, 255, 0.08);
+  --zeus-glass-high:  rgba(255, 255, 255, 0.13);
+
+  /* Semantic */
+  --background:       var(--zeus-night);
+  --foreground:       var(--zeus-marble);
+  --accent:           var(--zeus-bolt);
+  --accent-dim:       var(--zeus-gold);
+  --muted:            var(--zeus-silver);
+
+  /* Divine Gradients */
+  --grad-sky:         linear-gradient(170deg, #05070f 0%, #0b1228 40%, #1a2550 100%);
+  --grad-gold:        linear-gradient(135deg, #f5c842 0%, #d4a017 50%, #e8900a 100%);
+  --grad-gold-shine:  linear-gradient(105deg, #fef3c7 0%, #f5c842 30%, #d4a017 70%, #e8900a 100%);
+  --grad-card:        linear-gradient(145deg, rgba(26,37,80,0.9) 0%, rgba(11,18,40,0.95) 100%);
+  --grad-bolt:        linear-gradient(180deg, #f5c842 0%, rgba(245,200,66,0) 100%);
+
+  /* Glow Effects */
+  --glow-gold:        0 0 20px rgba(245, 200, 66, 0.4), 0 0 60px rgba(245, 200, 66, 0.15);
+  --glow-gold-sm:     0 0 8px rgba(245, 200, 66, 0.35), 0 0 20px rgba(245, 200, 66, 0.1);
+  --glow-card:        0 8px 40px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4);
+  --glow-card-hover:  0 16px 60px rgba(0,0,0,0.7), 0 0 30px rgba(245,200,66,0.12);
+
+  /* Typography Scale */
+  --font-display:     'Cinzel Decorative', serif;
+  --font-heading:     'Cinzel', serif;
+  --font-body:        'Outfit', sans-serif;
+
+  /* Spacing & Radius */
+  --radius-sm:        8px;
+  --radius-md:        14px;
+  --radius-lg:        20px;
+  --radius-xl:        28px;
+  --radius-pill:      9999px;
+
+  /* Transitions */
+  --ease-bounce:      cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth:      cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:      cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --dur-fast:         150ms;
+  --dur-mid:          300ms;
+  --dur-slow:         600ms;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; -ms-overflow-style: none; }
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background-color: #e2e8f0; /* Desktop background */
+  background: var(--zeus-void);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(26, 37, 80, 0.8) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 80% 20%, rgba(245, 200, 66, 0.04) 0%, transparent 60%);
+  font-family: var(--font-body);
+  color: var(--foreground);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
+/* ============================================================
+   APP CONTAINER — Mobile Shell
+   ============================================================ */
 .app-container {
-  @apply mx-auto max-w-mobile min-h-screen bg-background text-foreground shadow-xl relative pb-16 overflow-x-hidden;
+  @apply mx-auto max-w-mobile min-h-screen relative overflow-x-hidden;
+  background: var(--grad-sky);
+  box-shadow:
+    0 0 0 1px rgba(245, 200, 66, 0.06),
+    0 0 80px rgba(0, 0, 0, 0.9),
+    inset 0 0 120px rgba(11, 18, 40, 0.5);
+  padding-bottom: 80px;
+  position: relative;
 }
 
-/* Hide scrollbar for a cleaner mobile app look */
-::-webkit-scrollbar {
-  display: none;
+/* Marble texture overlay */
+.app-container::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  max-width: 430px;
+  margin: 0 auto;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* Ambient sky glow at top */
+.app-container::after {
+  content: '';
+  position: fixed;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(245,200,66,0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: ambientPulse 6s ease-in-out infinite;
+}
+
+/* ============================================================
+   OLYMPIAN BACKGROUND PARTICLES
+   Floating orbs that drift like souls in Elysium
+   ============================================================ */
+.zeus-sky {
+  position: fixed;
+  inset: 0;
+  max-width: 430px;
+  margin: 0 auto;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.zeus-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: floatOrb var(--orb-dur, 18s) ease-in-out infinite;
+  animation-delay: var(--orb-delay, 0s);
+}
+
+.zeus-orb--gold {
+  background: radial-gradient(circle, rgba(245,200,66,0.18) 0%, rgba(245,200,66,0) 70%);
+}
+.zeus-orb--blue {
+  background: radial-gradient(circle, rgba(100,140,255,0.12) 0%, rgba(100,140,255,0) 70%);
+}
+.zeus-orb--white {
+  background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0) 70%);
+}
+
+/* Lightning particle */
+.zeus-spark {
+  position: absolute;
+  width: 1px;
+  background: var(--grad-bolt);
+  pointer-events: none;
+  border-radius: 2px;
+  animation: sparkFall var(--spark-dur, 2.4s) ease-in infinite;
+  animation-delay: var(--spark-delay, 0s);
+  opacity: 0;
+}
+
+/* ============================================================
+   TYPOGRAPHY — DIVINE HIERARCHY
+   ============================================================ */
+.text-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: var(--grad-gold-shine);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 12px rgba(245,200,66,0.3));
+}
+
+.text-heading {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--zeus-marble);
+}
+
+.text-subheading {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--zeus-silver);
+  font-size: 0.7rem;
+}
+
+.text-body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--zeus-marble-mid);
+  line-height: 1.6;
+}
+
+.text-gold {
+  background: var(--grad-gold-shine);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-muted {
+  color: var(--zeus-silver);
+  font-size: 0.8rem;
+}
+
+/* ============================================================
+   CARDS — OLYMPIAN GLASS PANELS
+   ============================================================ */
+.zeus-card {
+  background: var(--grad-card);
+  border: 1px solid rgba(245, 200, 66, 0.1);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glow-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform var(--dur-mid) var(--ease-smooth),
+    box-shadow var(--dur-mid) var(--ease-smooth),
+    border-color var(--dur-mid) var(--ease-smooth);
+}
+
+.zeus-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(245,200,66,0.4) 50%, transparent 100%);
+}
+
+.zeus-card:active {
+  transform: scale(0.985);
+  box-shadow: var(--glow-card-hover);
+  border-color: rgba(245, 200, 66, 0.22);
+}
+
+/* Premium hero card */
+.zeus-card--hero {
+  background: linear-gradient(145deg,
+    rgba(30, 45, 92, 0.95) 0%,
+    rgba(15, 26, 58, 0.98) 60%,
+    rgba(8, 13, 26, 1) 100%);
+  border: 1px solid rgba(245, 200, 66, 0.2);
+  box-shadow:
+    var(--glow-card),
+    inset 0 1px 0 rgba(245,200,66,0.12),
+    inset 0 -1px 0 rgba(0,0,0,0.3);
+}
+
+.zeus-card--hero::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -20%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(245,200,66,0.06) 0%, transparent 70%);
+  pointer-events: none;
+  animation: ambientPulse 8s ease-in-out infinite;
+}
+
+/* Translucent panel */
+.zeus-card--glass {
+  background: var(--zeus-glass);
+  border: 1px solid rgba(255,255,255,0.07);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/* ============================================================
+   BALANCE CARD — THE CROWN JEWEL
+   ============================================================ */
+.balance-card {
+  background: linear-gradient(145deg,
+    #1a2550 0%,
+    #0f1a3a 50%,
+    #080d1a 100%);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(245,200,66,0.18);
+  padding: 28px 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.7),
+    0 0 0 1px rgba(245,200,66,0.05),
+    inset 0 1px 0 rgba(245,200,66,0.15);
+}
+
+.balance-card__lightning {
+  position: absolute;
+  top: 0; right: 24px;
+  width: 2px;
+  height: 60px;
+  background: var(--grad-bolt);
+  opacity: 0.7;
+  border-radius: 2px;
+  animation: lightningFlicker 4s ease-in-out infinite;
+}
+
+.balance-card__lightning::after {
+  content: '';
+  position: absolute;
+  top: 60px;
+  left: -4px;
+  width: 10px;
+  height: 16px;
+  background: var(--grad-bolt);
+  clip-path: polygon(50% 0%, 0% 45%, 40% 45%, 10% 100%, 100% 35%, 55% 35%);
+  opacity: 0.9;
+}
+
+.balance-card__amount {
+  font-family: var(--font-heading);
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  background: var(--grad-gold-shine);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 8px rgba(245,200,66,0.25));
+  line-height: 1.1;
+}
+
+.balance-card__label {
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(245,200,66,0.6);
+  margin-bottom: 4px;
+}
+
+/* Decorative corner ornament */
+.balance-card__ornament {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 64px;
+  height: 64px;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23f5c842' d='M32 4l4 12h12l-10 8 4 12-10-8-10 8 4-12-10-8h12z'/%3E%3Ccircle cx='32' cy='32' r='28' fill='none' stroke='%23f5c842' stroke-width='1'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23f5c842' stroke-width='0.5'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+/* ============================================================
+   STAT CHIPS
+   ============================================================ */
+.stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-pill);
+  padding: 6px 12px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--zeus-marble-mid);
+  transition: all var(--dur-fast) var(--ease-smooth);
+}
+
+.stat-chip--positive {
+  background: rgba(52, 211, 153, 0.08);
+  border-color: rgba(52, 211, 153, 0.2);
+  color: #6ee7b7;
+}
+
+.stat-chip--negative {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+.stat-chip--gold {
+  background: rgba(245, 200, 66, 0.08);
+  border-color: rgba(245, 200, 66, 0.22);
+  color: var(--zeus-bolt);
+}
+
+/* ============================================================
+   BUTTONS — DIVINE ACTIONS
+   ============================================================ */
+.btn-zeus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--radius-pill);
+  padding: 12px 24px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--dur-mid) var(--ease-bounce);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Primary — Gold Lightning */
+.btn-zeus--primary {
+  background: var(--grad-gold);
+  color: var(--zeus-void);
+  box-shadow:
+    0 4px 20px rgba(245,200,66,0.3),
+    0 1px 0 rgba(255,255,255,0.2) inset;
+}
+
+.btn-zeus--primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--dur-fast);
+}
+
+.btn-zeus--primary:hover::before,
+.btn-zeus--primary:active::before {
+  opacity: 1;
+}
+
+.btn-zeus--primary:active {
+  transform: scale(0.96) translateY(1px);
+  box-shadow: 0 2px 10px rgba(245,200,66,0.2);
+}
+
+/* Shimmer ripple on tap */
+.btn-zeus--primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg,
+    transparent 30%,
+    rgba(255,255,255,0.25) 50%,
+    transparent 70%);
+  transform: translateX(-100%);
+  border-radius: inherit;
+}
+
+.btn-zeus--primary:active::after {
+  animation: btnShimmer 0.5s ease-out;
+}
+
+/* Ghost variant */
+.btn-zeus--ghost {
+  background: transparent;
+  color: var(--zeus-bolt);
+  border: 1px solid rgba(245,200,66,0.3);
+}
+
+.btn-zeus--ghost:active {
+  background: rgba(245,200,66,0.08);
+  transform: scale(0.96);
+}
+
+/* Icon button */
+.btn-zeus--icon {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: var(--radius-lg);
+  background: var(--zeus-glass-mid);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--zeus-marble);
+  font-size: 1.1rem;
+}
+
+.btn-zeus--icon:active {
+  background: rgba(245,200,66,0.1);
+  border-color: rgba(245,200,66,0.25);
+  transform: scale(0.92);
+}
+
+/* ============================================================
+   PROGRESS / BUDGET BAR
+   ============================================================ */
+.budget-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.07);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  position: relative;
+}
+
+.budget-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--grad-gold);
+  position: relative;
+  transition: width 1s var(--ease-bounce);
+  box-shadow: 0 0 10px rgba(245,200,66,0.4);
+}
+
+.budget-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 20px; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4));
+  animation: shimmerSlide 2.5s ease-in-out infinite;
+}
+
+.budget-fill--warning {
+  background: linear-gradient(90deg, #f5c842, #f59842);
+  box-shadow: 0 0 10px rgba(245,152,66,0.4);
+}
+
+.budget-fill--danger {
+  background: linear-gradient(90deg, #f59842, #ef4444);
+  box-shadow: 0 0 10px rgba(239,68,68,0.4);
+}
+
+/* ============================================================
+   BOTTOM NAVIGATION — OLYMPUS DAIS
+   ============================================================ */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  background: rgba(8, 13, 26, 0.92);
+  backdrop-filter: blur(32px) saturate(1.5);
+  -webkit-backdrop-filter: blur(32px) saturate(1.5);
+  border-top: 1px solid rgba(245,200,66,0.1);
+  padding: 10px 8px 20px;
+  z-index: 100;
+  box-shadow: 0 -8px 40px rgba(0,0,0,0.6);
+}
+
+.bottom-nav::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 20%; right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245,200,66,0.5), transparent);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-bounce);
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-item__icon {
+  font-size: 1.25rem;
+  transition: transform var(--dur-mid) var(--ease-bounce);
+  filter: grayscale(1) opacity(0.5);
+}
+
+.nav-item__label {
+  font-family: var(--font-heading);
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--zeus-silver);
+  transition: color var(--dur-fast);
+}
+
+.nav-item--active .nav-item__icon {
+  filter: grayscale(0) drop-shadow(0 0 8px rgba(245,200,66,0.6));
+  transform: translateY(-2px) scale(1.1);
+}
+
+.nav-item--active .nav-item__label {
+  color: var(--zeus-bolt);
+}
+
+.nav-item--active::before {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 2px;
+  background: var(--grad-gold);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--glow-gold-sm);
+}
+
+.nav-item:active {
+  transform: scale(0.88);
+}
+
+/* ============================================================
+   EXPENSE CALENDAR
+   ============================================================ */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.calendar-day:active {
+  transform: scale(0.9);
+  background: rgba(245,200,66,0.1);
+  border-color: rgba(245,200,66,0.2);
+}
+
+.calendar-day--today {
+  background: rgba(245,200,66,0.08);
+  border-color: rgba(245,200,66,0.25);
+}
+
+.calendar-day--today::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(245,200,66,0.1) 0%, transparent 70%);
+}
+
+.calendar-day--active {
+  background: rgba(245,200,66,0.12);
+  border-color: rgba(245,200,66,0.4);
+  box-shadow: 0 0 12px rgba(245,200,66,0.15);
+}
+
+.calendar-day__number {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--zeus-marble-mid);
+}
+
+.calendar-day--today .calendar-day__number {
+  color: var(--zeus-bolt);
+}
+
+.calendar-day__amount {
+  font-family: var(--font-body);
+  font-size: 0.52rem;
+  color: rgba(245,200,66,0.6);
+  font-weight: 500;
+}
+
+/* ============================================================
+   TRANSACTION LIST ITEMS
+   ============================================================ */
+.transaction-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: all var(--dur-fast) var(--ease-smooth);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.transaction-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 20%; bottom: 20%;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--item-accent, transparent);
+}
+
+.transaction-item--expense { --item-accent: #ef4444; }
+.transaction-item--income  { --item-accent: #34d399; }
+.transaction-item--invest  { --item-accent: var(--zeus-bolt); }
+
+.transaction-item:active {
+  background: rgba(255,255,255,0.06);
+  transform: translateX(2px);
+}
+
+.transaction-item__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+
+.transaction-item__icon--expense {
+  background: rgba(239,68,68,0.1);
+  border-color: rgba(239,68,68,0.15);
+}
+.transaction-item__icon--income {
+  background: rgba(52,211,153,0.1);
+  border-color: rgba(52,211,153,0.15);
+}
+.transaction-item__icon--invest {
+  background: rgba(245,200,66,0.08);
+  border-color: rgba(245,200,66,0.15);
+}
+
+.transaction-item__name {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--zeus-marble);
+  line-height: 1.2;
+}
+
+.transaction-item__meta {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--zeus-silver);
+  margin-top: 2px;
+}
+
+.transaction-item__amount {
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.transaction-item__amount--positive { color: #6ee7b7; }
+.transaction-item__amount--negative { color: #fca5a5; }
+.transaction-item__amount--gold {
+  background: var(--grad-gold-shine);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================================
+   FORMS — DIVINE INPUT
+   ============================================================ */
+.zeus-input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--zeus-marble);
+  outline: none;
+  transition: all var(--dur-mid) var(--ease-smooth);
+  -webkit-appearance: none;
+}
+
+.zeus-input::placeholder {
+  color: rgba(160, 174, 192, 0.4);
+  font-family: var(--font-body);
+}
+
+.zeus-input:focus {
+  background: rgba(245,200,66,0.04);
+  border-color: rgba(245,200,66,0.35);
+  box-shadow: 0 0 0 3px rgba(245,200,66,0.08), 0 0 20px rgba(245,200,66,0.05);
+}
+
+.zeus-label {
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(245,200,66,0.5);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.zeus-select {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--zeus-marble);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23f5c842' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  transition: all var(--dur-mid) var(--ease-smooth);
+}
+
+.zeus-select:focus {
+  border-color: rgba(245,200,66,0.35);
+  box-shadow: 0 0 0 3px rgba(245,200,66,0.08);
+}
+
+/* Amount input — big and proud */
+.zeus-input--amount {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(245,200,66,0.25);
+  border-radius: 0;
+  padding: 8px 0;
+  color: var(--zeus-bolt);
+}
+
+.zeus-input--amount:focus {
+  border-color: rgba(245,200,66,0.6);
+  box-shadow: none;
+  background: transparent;
+}
+
+/* ============================================================
+   SECTION HEADERS
+   ============================================================ */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(245,200,66,0.55);
+}
+
+.section-title::before {
+  content: '⚡';
+  margin-right: 6px;
+  font-size: 0.65rem;
+}
+
+.section-action {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--zeus-bolt);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: opacity var(--dur-fast);
+}
+.section-action:active { opacity: 1; }
+
+/* ============================================================
+   INVESTMENT SIMULATOR
+   ============================================================ */
+.simulator-track {
+  position: relative;
+  padding: 20px;
+  background: linear-gradient(145deg,
+    rgba(15, 26, 58, 0.8) 0%,
+    rgba(8, 13, 26, 0.9) 100%);
+  border: 1px solid rgba(245,200,66,0.12);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.simulator-track::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 120px; height: 120px;
+  background: radial-gradient(circle, rgba(245,200,66,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.simulator-result {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+  background: var(--grad-gold-shine);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 10px rgba(245,200,66,0.2));
+}
+
+/* CDI badge */
+.cdi-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(245,200,66,0.1);
+  border: 1px solid rgba(245,200,66,0.25);
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: var(--zeus-bolt);
+  font-weight: 600;
+}
+
+/* ============================================================
+   SAVINGS GOALS
+   ============================================================ */
+.goal-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--grad-card);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-xl);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--dur-mid) var(--ease-smooth);
+}
+
+.goal-card--completed {
+  border-color: rgba(52,211,153,0.2);
+  background: linear-gradient(145deg,
+    rgba(52,211,153,0.05) 0%,
+    rgba(8,13,26,0.95) 100%);
+}
+
+.goal-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* ============================================================
+   PAGE TRANSITIONS & ENTER ANIMATIONS
+   ============================================================ */
+.page-enter {
+  animation: pageSlideUp 0.35s var(--ease-smooth) both;
+}
+
+/* Staggered list items */
+.list-item-enter {
+  animation: listItemFade 0.4s var(--ease-smooth) both;
+}
+.list-item-enter:nth-child(1) { animation-delay: 0.05s; }
+.list-item-enter:nth-child(2) { animation-delay: 0.10s; }
+.list-item-enter:nth-child(3) { animation-delay: 0.15s; }
+.list-item-enter:nth-child(4) { animation-delay: 0.20s; }
+.list-item-enter:nth-child(5) { animation-delay: 0.25s; }
+.list-item-enter:nth-child(6) { animation-delay: 0.30s; }
+.list-item-enter:nth-child(7) { animation-delay: 0.35s; }
+.list-item-enter:nth-child(8) { animation-delay: 0.40s; }
+
+/* Number counter animation */
+.counter-enter {
+  animation: counterRoll 0.8s var(--ease-bounce) both;
+}
+
+/* Card pop-in */
+.card-enter {
+  animation: cardPop 0.45s var(--ease-spring) both;
+}
+
+/* ============================================================
+   SKELETON LOADERS
+   ============================================================ */
+.skeleton {
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0.04) 0%,
+    rgba(255,255,255,0.09) 50%,
+    rgba(255,255,255,0.04) 100%);
+  background-size: 200% 100%;
+  border-radius: var(--radius-md);
+  animation: skeletonShimmer 1.8s ease-in-out infinite;
+}
+
+/* ============================================================
+   DIVIDERS & ORNAMENTS
+   ============================================================ */
+.divider-gold {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(245,200,66,0.2) 30%,
+    rgba(245,200,66,0.2) 70%,
+    transparent 100%);
+  margin: 20px 0;
+}
+
+.divider-gold--with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.divider-gold--with-icon::before,
+.divider-gold--with-icon::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245,200,66,0.2));
+}
+
+.divider-gold--with-icon::after {
+  background: linear-gradient(90deg, rgba(245,200,66,0.2), transparent);
+}
+
+/* ============================================================
+   TOAST / NOTIFICATION
+   ============================================================ */
+.zeus-toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-80px);
+  background: rgba(8, 13, 26, 0.95);
+  border: 1px solid rgba(245,200,66,0.2);
+  border-radius: var(--radius-pill);
+  padding: 12px 20px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--zeus-marble);
+  backdrop-filter: blur(24px);
+  box-shadow: var(--glow-card), 0 0 20px rgba(245,200,66,0.1);
+  z-index: 9999;
+  white-space: nowrap;
+  transition: transform 0.4s var(--ease-spring);
+}
+
+.zeus-toast--show {
+  transform: translateX(-50%) translateY(0);
+}
+
+.zeus-toast--success { border-color: rgba(52,211,153,0.3); }
+.zeus-toast--error   { border-color: rgba(239,68,68,0.3); }
+
+/* ============================================================
+   MODAL / BOTTOM SHEET
+   ============================================================ */
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 7, 15, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 200;
+  animation: fadeIn var(--dur-mid) var(--ease-smooth) both;
+}
+
+.sheet-panel {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  width: 100%;
+  max-width: 430px;
+  background: linear-gradient(180deg, #111827 0%, #080d1a 100%);
+  border: 1px solid rgba(245,200,66,0.1);
+  border-bottom: none;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding: 24px 20px 40px;
+  z-index: 201;
+  transition: transform 0.4s var(--ease-spring);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.sheet-panel::before {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 4px;
+  background: rgba(245,200,66,0.2);
+  border-radius: var(--radius-pill);
+  margin: -8px auto 20px;
+}
+
+.sheet-panel::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 20%; right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245,200,66,0.4), transparent);
+}
+
+.sheet-panel--open {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================================
+   DARK MODE TOGGLE
+   ============================================================ */
+.toggle-zeus {
+  width: 48px;
+  height: 26px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-pill);
+  position: relative;
+  cursor: pointer;
+  transition: all var(--dur-mid) var(--ease-smooth);
+}
+
+.toggle-zeus::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 18px; height: 18px;
+  background: var(--zeus-marble);
+  border-radius: 50%;
+  transition: all var(--dur-mid) var(--ease-bounce);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.toggle-zeus--on {
+  background: rgba(245,200,66,0.15);
+  border-color: rgba(245,200,66,0.4);
+}
+
+.toggle-zeus--on::after {
+  transform: translateX(22px);
+  background: var(--zeus-bolt);
+  box-shadow: var(--glow-gold-sm);
+}
+
+/* ============================================================
+   UTILITY CLASSES
+   ============================================================ */
+.blur-bg    { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.gold-border { border: 1px solid rgba(245,200,66,0.18); }
+.gold-glow  { box-shadow: var(--glow-gold-sm); }
+.surface    { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); }
+.p-safe     { padding: 20px 16px; }
+.z-page     { position: relative; z-index: 1; }
+.font-display { font-family: var(--font-display); }
+.font-heading { font-family: var(--font-heading); }
+.font-body    { font-family: var(--font-body); }
+
+/* ============================================================
+   KEYFRAME ANIMATIONS
+   ============================================================ */
+
+/* Ambient golden pulsation */
+@keyframes ambientPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1) translateX(-50%); }
+  50%       { opacity: 1;   transform: scale(1.15) translateX(-43%); }
+}
+
+/* Floating orbs drift */
+@keyframes floatOrb {
+  0%   { transform: translate(0, 0) scale(1); opacity: 0; }
+  10%  { opacity: 1; }
+  50%  { transform: translate(var(--orb-x, 30px), var(--orb-y, -60px)) scale(1.1); }
+  90%  { opacity: 1; }
+  100% { transform: translate(var(--orb-x2, -20px), var(--orb-y2, -120px)) scale(0.9); opacity: 0; }
+}
+
+/* Lightning spark falls */
+@keyframes sparkFall {
+  0%   { opacity: 0; transform: translateY(-10px) scaleY(0.5); }
+  20%  { opacity: 0.8; transform: translateY(0) scaleY(1); }
+  80%  { opacity: 0.6; }
+  100% { opacity: 0; transform: translateY(var(--spark-travel, 80px)) scaleY(1.2); }
+}
+
+/* Lightning flicker on balance card */
+@keyframes lightningFlicker {
+  0%, 90%, 100% { opacity: 0.6; }
+  92%            { opacity: 1; box-shadow: 0 0 12px rgba(245,200,66,0.8); }
+  94%            { opacity: 0.3; }
+  96%            { opacity: 0.9; }
+}
+
+/* Progress bar shimmer */
+@keyframes shimmerSlide {
+  0%   { transform: translateX(-200%); }
+  100% { transform: translateX(200%); }
+}
+
+/* Button shimmer */
+@keyframes btnShimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+/* Skeleton loader */
+@keyframes skeletonShimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Page slide up on navigate */
+@keyframes pageSlideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Staggered list items */
+@keyframes listItemFade {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Counter roll-up */
+@keyframes counterRoll {
+  from { opacity: 0; transform: translateY(10px) scale(0.92); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Card pop in */
+@keyframes cardPop {
+  from { opacity: 0; transform: scale(0.94) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Fade in */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Continuous subtle rotate for ornamental icons */
+@keyframes slowSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Golden border pulse for active states */
+@keyframes borderPulse {
+  0%, 100% { border-color: rgba(245,200,66,0.18); }
+  50%       { border-color: rgba(245,200,66,0.4); box-shadow: 0 0 20px rgba(245,200,66,0.12); }
+}
+
+/* Bolt strike — for special emphasis */
+@keyframes boltStrike {
+  0%   { opacity: 0; clip-path: polygon(48% 0%, 52% 0%, 58% 45%, 72% 45%, 44% 100%, 48% 58%, 34% 58%); transform: scale(0.8); }
+  30%  { opacity: 1; transform: scale(1.05); }
+  60%  { opacity: 0.9; }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* ============================================================
+   RESPONSIVE — Desktop centering
+   ============================================================ */
+@media (min-width: 431px) {
+  body {
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(15, 26, 58, 0.5) 0%, transparent 60%),
+      var(--zeus-void);
+    display: flex;
+    justify-content: center;
+  }
+
+  .bottom-nav {
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  }
+}
+
+/* ============================================================
+   DARK MODE (class-based, matching Tailwind darkMode: 'class')
+   ============================================================ */
+.dark {
+  --background: var(--zeus-night);
+  --foreground: var(--zeus-marble);
+}
+
+/* Light mode override — "Daybreak on Olympus" */
+.light {
+  --zeus-night:    #f5f0e8;
+  --zeus-deep:     #ede8df;
+  --zeus-storm:    #e0dace;
+  --zeus-marble:   #1a1a2e;
+  --zeus-marble-mid: #2d2d4e;
+  --zeus-silver:   #5a5a7a;
+  --zeus-glass:    rgba(0,0,0,0.03);
+  --zeus-glass-mid: rgba(0,0,0,0.06);
+  --background:    #f5f0e8;
+  --foreground:    #1a1a2e;
+  --grad-sky:      linear-gradient(170deg, #f5f0e8 0%, #ede8df 60%, #e0dace 100%);
+  --grad-card:     linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(240,235,225,0.95) 100%);
 }

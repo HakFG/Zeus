@@ -1,6 +1,7 @@
 'use client';
 
 import { formatCurrency } from '@/lib/formatters';
+import SensitiveValue from '@/components/privacy/SensitiveValue';
 import { ShoppingCart, Utensils, Car, Film, Stethoscope, Book, MoreHorizontal } from 'lucide-react';
 import { format, isToday, isYesterday, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -53,7 +54,7 @@ export default function RecentExpenses({ expenses }: { expenses: Expense[] }) {
                   </div>
                 </div>
                 <div className="font-semibold text-red-500">
-                  -{formatCurrency(expense.amount)}
+                  <SensitiveValue>-{formatCurrency(expense.amount)}</SensitiveValue>
                 </div>
               </div>
             );

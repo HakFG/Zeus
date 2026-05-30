@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { formatCurrency } from '@/lib/formatters';
+import SensitiveValue from '@/components/privacy/SensitiveValue';
 
 type Expense = {
   id: string;
@@ -143,7 +144,7 @@ export default function ExpenseCalendar({ expenses }: { expenses: Expense[] }) {
                 </span>
                 {dayExpenses.length > 0 && (
                   <span className="mt-1 max-w-full truncate px-1 text-[10px] font-semibold text-red-500">
-                    {formatCurrency(dayTotal)}
+                    <SensitiveValue>{formatCurrency(dayTotal)}</SensitiveValue>
                   </span>
                 )}
               </button>
@@ -158,7 +159,9 @@ export default function ExpenseCalendar({ expenses }: { expenses: Expense[] }) {
             <h3 className="text-sm font-bold text-slate-800 dark:text-slate-200">{formatDateKey(selectedDate)}</h3>
             <p className="text-xs text-slate-500">{selectedExpenses.length} despesa(s) nesse dia</p>
           </div>
-          <p className="text-sm font-bold text-red-500">-{formatCurrency(selectedTotal)}</p>
+          <p className="text-sm font-bold text-red-500">
+            <SensitiveValue>-{formatCurrency(selectedTotal)}</SensitiveValue>
+          </p>
         </div>
 
         {selectedExpenses.length === 0 ? (
@@ -171,7 +174,9 @@ export default function ExpenseCalendar({ expenses }: { expenses: Expense[] }) {
                   <p className="font-semibold text-slate-800 dark:text-slate-200">{expense.description}</p>
                   {expense.note && <p className="mt-1 text-xs text-slate-500">{expense.note}</p>}
                 </div>
-                <p className="font-medium text-red-500">-{formatCurrency(expense.amount)}</p>
+                <p className="font-medium text-red-500">
+                  <SensitiveValue>-{formatCurrency(expense.amount)}</SensitiveValue>
+                </p>
               </div>
             ))}
           </div>

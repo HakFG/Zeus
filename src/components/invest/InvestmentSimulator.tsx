@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { simulateGrowth } from '@/lib/investmentCalc';
 import { formatCurrency } from '@/lib/formatters';
+import SensitiveValue from '@/components/privacy/SensitiveValue';
 
 export default function InvestmentSimulator() {
   const [principal, setPrincipal] = useState(500);
@@ -82,15 +83,21 @@ export default function InvestmentSimulator() {
       <div className="mt-6 space-y-3 rounded-xl bg-teal-50 p-4 dark:bg-teal-900/20">
         <div className="flex justify-between text-sm">
           <span className="text-slate-600 dark:text-slate-400">Total Investido</span>
-          <span className="font-semibold text-slate-900 dark:text-slate-100">{formatCurrency(result.invested)}</span>
+          <span className="font-semibold text-slate-900 dark:text-slate-100">
+            <SensitiveValue>{formatCurrency(result.invested)}</SensitiveValue>
+          </span>
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-slate-600 dark:text-slate-400">Rendimento Bruto</span>
-          <span className="font-semibold text-teal-600 dark:text-teal-400">+{formatCurrency(result.earnings)}</span>
+          <span className="font-semibold text-teal-600 dark:text-teal-400">
+            <SensitiveValue>+{formatCurrency(result.earnings)}</SensitiveValue>
+          </span>
         </div>
         <div className="flex justify-between border-t border-teal-100 pt-3 dark:border-teal-900/50">
           <span className="font-semibold text-slate-900 dark:text-slate-100">Total Estimado</span>
-          <span className="font-bold text-teal-600 dark:text-teal-400">{formatCurrency(result.balance)}</span>
+          <span className="font-bold text-teal-600 dark:text-teal-400">
+            <SensitiveValue>{formatCurrency(result.balance)}</SensitiveValue>
+          </span>
         </div>
       </div>
     </div>
